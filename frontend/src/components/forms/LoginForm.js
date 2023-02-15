@@ -1,7 +1,11 @@
 import Button from "../UI/Button";
 import Input from "../UI/Input";
 import classes from "./forms_modules/LoginForm.module.css";
-const LoginForm = ({ setOnRegister }) => {
+import { useContext } from "react";
+import { LoginModalContext } from "../../providers/LoginModalProvider";
+const LoginForm = () => {
+  const { setOnRegister } = useContext(LoginModalContext);
+  
   return (
     <form className={classes["login-form"]}>
       <h5>Accede a CODE SPACE WORKS</h5>

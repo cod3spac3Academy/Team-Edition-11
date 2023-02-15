@@ -1,9 +1,11 @@
-import Home from '../components/Home'
-
+import Home from "../components/Home";
+import LoginModalProvider from "../providers/LoginModalProvider";
 const HomePage = () => {
   return (
-    <Home/>
-  )
-}
+    <LoginModalProvider>
+      <Home />
+    </LoginModalProvider>
+  );
+};
 
-export default HomePage
+export default HomePage;
