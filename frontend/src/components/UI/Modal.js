@@ -1,14 +1,29 @@
 import classes from "./modulesUI/Modal.module.css";
+import { useEffect, useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faRectangleXmark } from "@fortawesome/free-regular-svg-icons";
-const Modal = ({ openModal, setOpenModal , children}) => {
+const Modal = ({ openModal, setOpenModal, children }) => {
+  const modalRef = useRef(null);
+  //Close modal when clicking outside
+  useEffect(() => {
+    document.addEventListener("click", handleClickOutside, true);
+    return () => {
+      document.removeEventListener("click", handleClickOutside, true);
+    };
+  }, []);
+
+  const handleClickOutside = (event) => {
+    if (modalRef.current && !modalRef.current.contains(event.target)) {
+      setOpenModal(false);
+    }
+  };
   return (
     <>
       <div
         className={`${classes["md-modal"]} 
         ${classes["md-effect"]} ${openModal && classes["md-show"]}`}
       >
-        <div className={classes["md-content"]}>
+        <div className={classes["md-content"]} ref={modalRef}>
           <FontAwesomeIcon
             icon={faRectangleXmark}
             role='button'
@@ -16,7 +31,7 @@ const Modal = ({ openModal, setOpenModal , children}) => {
             className={classes.close}
           />
 
-         {children}
+          {children}
         </div>
       </div>
       <div className={classes["md-overlay"]} />
