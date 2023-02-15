@@ -1,0 +1,48 @@
+.login-form h5 {
+  text-align: center;
+  margin-bottom: 1rem;
+  margin-top: 1rem;
+}
+.login-form label {
+  font-size: 0.7rem;
+  padding: 0;
+  text-align: left;
+}
+
+.login-form input[type="checkbox"] {
+  margin: 0 0.3rem 0 0;
+  display: block;
+}
+
+.login-form a,
+.login-form .register {
+  font-size: 0.7rem;
+  text-decoration: none;
+  color: var(--lightgrey);
+  cursor: pointer;
+}
+
+.login-form a:hover,
+.login-form .register:hover {
+  color: #47d7ac;
+}
+.flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0;
+}
+
+.no-account {
+  font-size: 0.6rem;
+  padding: 0.3rem;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.remember {
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  margin: 1rem 0;
+}

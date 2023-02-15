@@ -1,0 +1,24 @@
+.main {
+  color: #4f4f4f;
+  line-height: 2rem;
+  position: relative;
+  overflow: hidden;
+  width: 100vw;
+  height: 100vh;
+}
+
+.user-btn {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  margin: 1rem;
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  font-size: 1.3rem;
+}
+
+.user-btn:hover {
+  color: #47d7ac;
+}
+
