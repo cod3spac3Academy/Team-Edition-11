@@ -26,3 +26,9 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 secret.js
+
+# logs
+/logs
+
+# dotenv environment variables file
+.env

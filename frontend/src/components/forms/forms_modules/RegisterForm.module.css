@@ -62,13 +62,16 @@
 }
 
 .alert-green {
-  background-color: rgb(120, 223, 120);
+  background-color: var(--valid);
   border-radius: 0.3rem;
   color: rgb(41, 39, 39);
   padding: 0.25rem;
   width: 90%;
   margin: 1rem auto;
   display: block;
+  font-weight: 300;
+  font-size: .7rem;
+  color: #fff;
 }
 
 .hide {

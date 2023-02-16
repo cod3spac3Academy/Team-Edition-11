@@ -22,15 +22,15 @@ import Button from "../UI/Button";
 import Input from "../UI/Input";
 
 const RegisterForm = () => {
-  const { setOnRegister, openModal } = useContext(LoginModalContext);
+  const { setOnRegister, openLoginModal } = useContext(LoginModalContext);
   const nameRef = useRef(); //Set focus in user input when component loads
   const errRef = useRef(); //Set focus if we get error, so screenreader can read it
 
   const [state, dispatch] = useReducer(registerReducer, initialRegisterState);
 
   useEffect(() => {
-    if (!openModal) setOnRegister(false);
-  }, [openModal]);
+    if (!openLoginModal) setOnRegister(false);
+  }, [openLoginModal]);
 
   
   //Put focus in name field
@@ -67,9 +67,20 @@ const RegisterForm = () => {
   //state for successfull registration
   const [success, setSuccess] = useState(false);
 
+  const newUser = {
+    name:state.userName,
+    email:state.email,
+    password:state.pwd,
+    role:state.role,
+    registerAt: new Date(),
+    lastLogin: new Date(),
+   }
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Submit");
+    console.log(newUser);
+    dispatch({type:REGISTER.RESTORE_STATE, payload:initialRegisterState})
+    setSuccess(true);
   };
 
   return (
@@ -91,8 +102,7 @@ const RegisterForm = () => {
 
         {success && (
           <p className={classes["alert-green"]}>
-            <FontAwesomeIcon icon={faInfoCircle} />
-            Usuario creado con exito y sera redirigido a la pagina de login
+            <FontAwesomeIcon icon={faInfoCircle} /> Usuario creado con exito
           </p>
         )}
 
@@ -329,6 +339,11 @@ const RegisterForm = () => {
           </p>
           <Button
             buttonTxt='Registrarse'
+            className= {
+              !state.validName ||
+              !state.validEmail ||
+              !state.validPwd ||
+              !state.validMatch ? "disabled" : "form-btn"}
             disabled={
               !state.validName ||
               !state.validEmail ||
