@@ -35,7 +35,7 @@ const Home = () => {
           <FontAwesomeIcon icon={faUser} />
         </button>
         <div className={classes["main-container"]}>
-          {/* <div className={classes["content-container"]}>
+          <div className={classes["content-container"]}>
             <div className={classes["texto"]}>
               <h5>
                 Más de 500 de nuestros alumnos ya estan trabajando en las
@@ -46,22 +46,22 @@ const Home = () => {
         <div className={classes["images-container"]}>
           <div className={classes["images-box"]}>
             <div className={classes["images-row"]}>
-              <div className={classes["image-one-box"]}>
-                <figure className={classes["image"]}>
+              <div className={`${classes["image-one-box"]} ${classes["fadeInLeft"]}`}>
+                <figure className={classes["figure-image"]}>
                   <img src={img1} alt='people' />
                 </figure>             
               </div>
-              <div className={classes["image-two-three-box"]}>
-                <figure className={classes["image"]}>
+              <div className={`${classes["image-two-three-box"]} ${classes["fadeInRight"]}`}>
+                <figure className={classes["figure-image"]}>
                   <img src={img2} alt='people' />
                 </figure>
-                <figure className={classes["image"]}>
+                <figure className={classes["figure-image"]}>
                   <img src={img3} alt='people' />
                 </figure>
               </div>
             </div>
           </div>
-        </div> */}
+        </div>
         </div>
         
 
