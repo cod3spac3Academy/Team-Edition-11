@@ -41,8 +41,25 @@ const createNewUser = asyncHandler(async (req, res) => {
           status: "success",
           message: "User created successfully",
           newUser: {
+            id: newUser._id,
             email: newUser.email,
             role: newUser.role,
+            accessToken: jwt.sign(
+              {
+                UserInfo: {
+                  id: newUser._id,
+                  email: newUser.email,
+                  role: newUser.role,
+                },
+              },
+              process.env.ACCESS_TOKEN_SECRET,
+              { expiresIn: "15m" }
+            ),
+            refreshToken: jwt.sign(
+              { email: newUser.email },
+              process.env.REFRESH_TOKEN_SECRET,
+              { expiresIn: "7d" }
+            ),
           },
           error: null,
         })
@@ -113,13 +130,13 @@ const login = asyncHandler(async (req, res) => {
             },
           },
           process.env.ACCESS_TOKEN_SECRET,
-          { expiresIn: "15m" }
+          { expiresIn: "20s" }
         );
 
         const refreshToken = jwt.sign(
           { email: foundUser.email },
           process.env.REFRESH_TOKEN_SECRET,
-          { expiresIn: "7d" }
+          { expiresIn: "1m" }
         );
         // Send accessToken and refreshToken
         res.json({
@@ -138,6 +155,9 @@ const login = asyncHandler(async (req, res) => {
     });
   }
 });
+// @desc updateUser
+// @route PATCH /auth/login/:id
+// @access Private
 
 const updateUser = asyncHandler(async (req, res) => {
   const foundUser = await Login.findByIdAndUpdate(
@@ -159,12 +179,11 @@ const updateUser = asyncHandler(async (req, res) => {
 // @route GET /auth/refresh
 // @access Public - because access token has expired
 const refresh = (req, res) => {
-  const cookies = req.cookies;
+  const authHeader = req.headers.authorization || req.headers.Authorization;
 
-  if (!cookies?.jwt) return res.status(401).json({ message: "Unauthorized" });
+  if (!authHeader) return res.status(401).json({ message: "Unauthorized" });
 
-  const refreshToken = cookies.jwt;
-
+  const refreshToken = authHeader.split(" ")[1];
   jwt.verify(
     refreshToken,
     process.env.REFRESH_TOKEN_SECRET,
@@ -189,7 +208,7 @@ const refresh = (req, res) => {
         { expiresIn: "15m" }
       );
 
-      res.json({ accessToken });
+      res.json({ accessToken , id: foundUser._id, role: foundUser.role});
     })
   );
 };

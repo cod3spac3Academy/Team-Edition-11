@@ -39,9 +39,25 @@ export default class ApiRequest {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
-          "authorization": `Bearer ${sessionStorage.getItem("accessToken")}`,
+          authorization: `Bearer ${sessionStorage.getItem("accessToken")}`,
         },
         body: JSON.stringify(body),
+      });
+      let data = await response.json();
+      return data;
+    } catch (err) {
+      return err;
+    }
+  }
+
+  static async refresh(refreshToken) {
+    try {
+      const response = await fetch(`${USERS_API}/refresh`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ${refreshToken}`,
+        },
       });
       let data = await response.json();
       return data;

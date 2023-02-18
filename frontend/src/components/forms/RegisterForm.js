@@ -22,7 +22,8 @@ import Button from "../UI/Button";
 import Input from "../UI/Input";
 
 const RegisterForm = () => {
-  const { setOnRegister, openLoginModal , setOpenLoginModal} = useContext(LoginModalContext);
+  const { setOnRegister, openLoginModal, setOpenLoginModal } =
+    useContext(LoginModalContext);
   const nameRef = useRef(); //Set focus in user input when component loads
   const errRef = useRef(); //Set focus if we get error, so screenreader can read it
 
@@ -86,9 +87,12 @@ const RegisterForm = () => {
     }
     const response = await ApiRequest.register(newUser);
     console.log("response", response);
-    
-    if ((response.status === "success")) {
+
+    if (response.status === "success") {
       console.log("register response", response);
+      sessionStorage.setItem("accessToken", response.newUser.accessToken);
+      sessionStorage.setItem("refreshToken", response.newUser.refreshToken);
+      sessionStorage.setItem("userId", response.newUser.id);
       dispatch({
         type: REGISTER.RESTORE_STATE,
         payload: initialRegisterState,
@@ -97,7 +101,10 @@ const RegisterForm = () => {
       setTimeout(() => {
         setOpenLoginModal(false);
       }, 2000);
-    } else if (response.status === 409 ||response.message === "This email is already registered") {
+    } else if (
+      response.status === 409 ||
+      response.message === "This email is already registered"
+    ) {
       //If we try to register a user with an already registered email, we will show an alert with error
       dispatch({
         type: REGISTER.ERROR_MSG,
@@ -387,19 +394,20 @@ const RegisterForm = () => {
             }
           />
           <div className={classes["have-account"]}>
-        <p>
-          ¿Ya tienes cuenta?
-          <span
-            className={classes.login}
-            onClick={() => {
-              setOnRegister(false);
-            }}
-          >  Acceder
-          </span>
-        </p>
-      </div>
+            <p>
+              ¿Ya tienes cuenta?
+              <span
+                className={classes.login}
+                onClick={() => {
+                  setOnRegister(false);
+                }}
+              >
+                {" "}
+                Acceder
+              </span>
+            </p>
+          </div>
         </form>
-
       </section>
     </>
   );

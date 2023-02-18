@@ -33,22 +33,25 @@ const LoginForm = () => {
     }
     if (response.accessToken) {
       setSuccesfullLogin(true);
+      if (loggedUser.rememberMe) {
+        localStorage.setItem("refreshToken", response.refreshToken);
+        localStorage.setItem("userId", response.id);
+      }
+      setOpenLoginModal(false);
+      sessionStorage.setItem("accessToken", response.accessToken);
+      sessionStorage.setItem("refreshToken", response.refreshToken);
+      sessionStorage.setItem("userId", response.id);
       setLoggedUser({
         email: "",
         password: "",
         rememberMe: false,
       });
-      setOpenLoginModal(false);
-      sessionStorage.setItem("accessToken", response.accessToken);
-      sessionStorage.setItem("refreshToken", response.refreshToken);
-      sessionStorage.setItem("userId", response.id);
     }
-
+    // Update last login date
     const update = await ApiRequest.update(
       { lastLogin: new Date() },
       sessionStorage.getItem("userId")
     );
-    console.log(update);
   };
 
   return (
