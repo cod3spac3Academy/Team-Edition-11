@@ -17,12 +17,12 @@ import {
 } from "../../reducers/registerReducer";
 
 import { EMAIL_REGEX, USER_REGEX, PWD_REGEX } from "../../utils/regExp";
-
+import ApiRequest from "../../services/apiRequest";
 import Button from "../UI/Button";
 import Input from "../UI/Input";
 
 const RegisterForm = () => {
-  const { setOnRegister, openLoginModal } = useContext(LoginModalContext);
+  const { setOnRegister, openLoginModal , setOpenLoginModal} = useContext(LoginModalContext);
   const nameRef = useRef(); //Set focus in user input when component loads
   const errRef = useRef(); //Set focus if we get error, so screenreader can read it
 
@@ -32,7 +32,6 @@ const RegisterForm = () => {
     if (!openLoginModal) setOnRegister(false);
   }, [openLoginModal]);
 
-  
   //Put focus in name field
   //Dependency array is empty, so it only happens, when the component loads
   //   useEffect(() => {
@@ -68,24 +67,60 @@ const RegisterForm = () => {
   const [success, setSuccess] = useState(false);
 
   const newUser = {
-    name:state.userName,
-    email:state.email,
-    password:state.pwd,
-    role:state.role,
+    userName: state.userName,
+    email: state.email,
+    password: state.pwd,
+    role: state.role,
     registerAt: new Date(),
     lastLogin: new Date(),
-   }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(newUser);
-    dispatch({type:REGISTER.RESTORE_STATE, payload:initialRegisterState})
-    setSuccess(true);
+    const v1 = EMAIL_REGEX.test(state.email); //boolean
+    const v2 = PWD_REGEX.test(state.pwd); //boolean
+    const v3 = USER_REGEX.test(state.userName); // boolean
+    if (!v1 || !v2 || !v3) {
+      dispatch({ type: REGISTER.ERROR_MSG, payload: "Invalid Entry" });
+      return;
+    }
+    const response = await ApiRequest.register(newUser);
+    console.log("response", response);
+    
+    if ((response.status === "success")) {
+      console.log("register response", response);
+      dispatch({
+        type: REGISTER.RESTORE_STATE,
+        payload: initialRegisterState,
+      });
+      setSuccess(true);
+      setTimeout(() => {
+        setOpenLoginModal(false);
+      }, 2000);
+    } else if (response.status === 409 ||response.message === "This email is already registered") {
+      //If we try to register a user with an already registered email, we will show an alert with error
+      dispatch({
+        type: REGISTER.ERROR_MSG,
+        payload:
+          "This email is already registered, you will be redirected to login form",
+      });
+      setTimeout(() => {
+        setOnRegister(false);
+      }, 2000);
+    } else if (response.message === "Failed to fetch") {
+      dispatch({
+        type: REGISTER.ERROR_MSG,
+        payload: "Conection error. Please reload the app",
+      });
+    }
   };
 
   return (
     <>
       <section className={classes["register-form"]}>
+        <h5>
+          Crea tu cuenta en <br /> CODE SPACE WORKS
+        </h5>
         {/* Parragraph for display error message.*/}
 
         <p
@@ -95,11 +130,6 @@ const RegisterForm = () => {
         >
           <FontAwesomeIcon icon={faInfoCircle} /> {state.errMsg}
         </p>
-
-        <h5>
-          Crea tu cuenta en <br /> CODE SPACE WORKS
-        </h5>
-
         {success && (
           <p className={classes["alert-green"]}>
             <FontAwesomeIcon icon={faInfoCircle} /> Usuario creado con exito
@@ -339,11 +369,14 @@ const RegisterForm = () => {
           </p>
           <Button
             buttonTxt='Registrarse'
-            className= {
+            className={
               !state.validName ||
               !state.validEmail ||
               !state.validPwd ||
-              !state.validMatch ? "disabled" : "form-btn"}
+              !state.validMatch
+                ? "disabled"
+                : "form-btn"
+            }
             disabled={
               !state.validName ||
               !state.validEmail ||
@@ -353,7 +386,20 @@ const RegisterForm = () => {
                 : false
             }
           />
+          <div className={classes["have-account"]}>
+        <p>
+          ¿Ya tienes cuenta?
+          <span
+            className={classes.login}
+            onClick={() => {
+              setOnRegister(false);
+            }}
+          >  Acceder
+          </span>
+        </p>
+      </div>
         </form>
+
       </section>
     </>
   );

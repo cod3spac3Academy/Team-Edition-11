@@ -1,26 +1,54 @@
 import Button from "../UI/Button";
 import Input from "../UI/Input";
 import classes from "./forms_modules/LoginForm.module.css";
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { LoginModalContext } from "../../providers/LoginModalProvider";
-
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
+import ApiRequest from "../../services/apiRequest";
 const LoginForm = () => {
-  const { setOnRegister } = useContext(LoginModalContext);
+  const { setOnRegister, setOpenLoginModal } = useContext(LoginModalContext);
   const [loggedUser, setLoggedUser] = useState({
     email: "",
     password: "",
     rememberMe: false,
-    lastLogin: new Date(),
   });
 
-  const handleLogin = () => {
-    console.log(loggedUser);
-    setLoggedUser({
-      email: "",
-      password: "",
-      rememberMe: false,
-      lastLogin: new Date(),
-    });
+  const [succesfullLogin, setSuccesfullLogin] = useState(false);
+  const [errMsg, setErrMsg] = useState("");
+  useEffect(() => {
+    setErrMsg("");
+  }, [loggedUser]);
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    const response = await ApiRequest.login(loggedUser);
+    if (response === "Failed to fetch") {
+      setErrMsg("Conection error. Please reload the app");
+      succesfullLogin(false);
+    }
+    if (response.error === "Wrong email or password") {
+      setErrMsg(response.error);
+      succesfullLogin(false);
+    }
+    if (response.accessToken) {
+      setSuccesfullLogin(true);
+      setLoggedUser({
+        email: "",
+        password: "",
+        rememberMe: false,
+      });
+      setOpenLoginModal(false);
+      sessionStorage.setItem("accessToken", response.accessToken);
+      sessionStorage.setItem("refreshToken", response.refreshToken);
+      sessionStorage.setItem("userId", response.id);
+    }
+
+    const update = await ApiRequest.update(
+      { lastLogin: new Date() },
+      sessionStorage.getItem("userId")
+    );
+    console.log(update);
   };
 
   return (
@@ -29,6 +57,17 @@ const LoginForm = () => {
       onSubmit={(e) => e.preventDefault()}
     >
       <h5>Accede a CODE SPACE WORKS</h5>
+      {errMsg && (
+        <p className={classes.errMsg}>
+          <FontAwesomeIcon icon={faInfoCircle} />
+          {errMsg}
+        </p>
+      )}
+      {succesfullLogin && (
+        <p className={classes["alert-green"]}>
+          <FontAwesomeIcon icon={faInfoCircle} /> Signed in successfully
+        </p>
+      )}
       <label htmlFor='email'>Email</label>
       <Input
         type='email'
@@ -57,7 +96,7 @@ const LoginForm = () => {
           <input
             type='checkbox'
             value={loggedUser.rememberMe}
-            checked
+            name='rememberMe'
             onChange={(e) => {
               setLoggedUser({ ...loggedUser, rememberMe: e.target.checked });
             }}
@@ -68,7 +107,11 @@ const LoginForm = () => {
         {/* open modal with change password form */}
         <a href='#'>Contarseña olvidada?</a>
       </div>
-      <Button buttonTxt='Acceder' onClick={handleLogin} />
+      <Button
+        buttonTxt='Acceder'
+        onClick={handleLogin}
+        disabled={!loggedUser.email || !loggedUser.password ? true : false}
+      />
       <div className={classes["no-account"]}>
         <p>
           ¿No tienes cuenta?
@@ -77,7 +120,9 @@ const LoginForm = () => {
             onClick={() => {
               setOnRegister(true);
             }}
-          >  Regístrate
+          >
+            {" "}
+            Regístrate
           </span>
         </p>
       </div>

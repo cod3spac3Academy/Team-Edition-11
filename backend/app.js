@@ -26,7 +26,7 @@ app.use(express.urlencoded({ extended: false }));
 // app.use(cookieParser);
 app.use(logger);
 
-app.use("/", require("./routes/userRoutes"));
+app.use("/auth", require("./routes/auth.routes"));
 app.use(errorHandler)
 db.once("open", () => {
     console.log("Connected to MongoDB");
