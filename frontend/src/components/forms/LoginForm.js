@@ -27,7 +27,7 @@ const LoginForm = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     const response = await ApiRequest.login(loggedUser);
-    if (response === "Failed to fetch") {
+    if (response.message === "Failed to fetch") {
       setErrMsg("Conection error. Please reload the app");
       succesfullLogin(false);
     }

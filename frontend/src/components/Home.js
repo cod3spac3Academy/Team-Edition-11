@@ -15,14 +15,25 @@ import { useState } from "react";
 const Home = () => {
   const [apearNotification, setApearNotification] = useState("");
   const [apearCandidates, setApearCandidates] = useState("");
-  const professions = [];
+  const [apearInfoBox1, setApearInfoBox1] = useState("");
+  const [apearInfoBox2, setApearInfoBox2] = useState("");
+  const [apearInfoBox3, setApearInfoBox3] = useState("");
 
   setTimeout(() => {
+    setApearInfoBox1("fadeInLeft");
+  }, 1800);
+  setTimeout(() => {
+    setApearInfoBox2("apear");
+  }, 2800);
+  setTimeout(() => {
+    setApearInfoBox3("apear");
+  }, 3800);
+  setTimeout(() => {
     setApearNotification("apear");
-  }, 2000);
+  }, 4300);
   setTimeout(() => {
     setApearCandidates("apear");
-  }, 3000);
+  }, 4800);
 
   return (
     <>
@@ -31,14 +42,12 @@ const Home = () => {
 
         <div className={classes["main-container"]}>
           <div className={classes["content-container"]}>
-            <div className={classes["texto"]}>
-              <p>
-                {" "}
+            <div className={classes["text"]}>
+              <p className={classes["inner-text"]}>
                 <FontAwesomeIcon
                   icon={faLocationDot}
                   className={classes["icon-location"]}
-                />{" "}
-                Talento esta aqui
+                /> Talento esta aqui!
               </p>
               <div className={classes["typing-box"]}>
                 <FontAwesomeIcon icon={faMagnifyingGlass} />
@@ -57,14 +66,32 @@ const Home = () => {
                   }}
                 />
               </div>
-              <div className={classes["info-box"]}>
-                <span className={classes.number}>+ 100</span> ofertas IT
+              <div
+                className={
+                  !apearInfoBox1
+                    ? classes.opaque
+                    : `${classes["info-box"]} ${classes[apearInfoBox1]}`
+                }
+              >
+                <span className={classes.number}>100 +</span> ofertas IT
               </div>
-              <div className={classes["info-box"]}>
-                <span className={classes.number}>+ 30</span> Empresas
+              <div
+                className={
+                  !apearInfoBox2
+                    ? classes.opaque
+                    : `${classes["info-box"]} ${classes[apearInfoBox2]}`
+                }
+              >
+                <span className={classes.number}>30 +</span> Empresas
               </div>
-              <div className={classes["info-box"]}>
-                <span className={classes.number}>+ 500 </span> CVs
+              <div
+                className={
+                  !apearInfoBox3
+                    ? classes.opaque
+                    : `${classes["info-box"]} ${classes[apearInfoBox3]}`
+                }
+              >
+                <span className={classes.number}>500 + </span> CVs
               </div>
             </div>
           </div>
