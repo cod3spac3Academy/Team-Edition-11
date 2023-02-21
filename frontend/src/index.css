@@ -10,6 +10,7 @@
   --lightgrey: #949494;
   --invalid:#e74d3cdc;
   --valid: #07bc0db2;
+  --header-height: 3rem;
 }
 
 *,

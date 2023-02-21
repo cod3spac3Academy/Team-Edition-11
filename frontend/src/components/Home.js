@@ -1,88 +1,132 @@
 import classes from "./modules/Home.module.css";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUser } from "@fortawesome/free-regular-svg-icons";
-import { useContext } from "react";
-import { LoginModalContext } from "../providers/LoginModalProvider";
-
-import ReactDOM from "react-dom";
-import Modal from "./UI/Modal";
-import LoginForm from "./forms/LoginForm";
-import RegisterForm from "./forms/RegisterForm";
 import img1 from "../assets/img/banner-img-1.png";
 import img2 from "../assets/img/banner-img-2.png";
 import img3 from "../assets/img/banner-img-3.png";
-
+import avatars from "../assets/img/img-people.png";
+import Typewriter from "typewriter-effect";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faSquare,
+  faLocationDot,
+  faMagnifyingGlass,
+} from "@fortawesome/free-solid-svg-icons";
+import { faEnvelope } from "@fortawesome/free-regular-svg-icons";
+import { useState } from "react";
 const Home = () => {
-  const { onRegister, setOpenLoginModal, openLoginModal } =
-    useContext(LoginModalContext);
+  const [apearNotification, setApearNotification] = useState("");
+  const [apearCandidates, setApearCandidates] = useState("");
+  const professions = [];
 
-  const handleClick = () => {
-    console.log("click");
-    setOpenLoginModal(true);
-  };
+  setTimeout(() => {
+    setApearNotification("apear");
+  }, 2000);
+  setTimeout(() => {
+    setApearCandidates("apear");
+  }, 3000);
+
   return (
     <>
-      {ReactDOM.createPortal(
-        <Modal openModal={openLoginModal} setOpenModal={setOpenLoginModal}>
-          {!onRegister && <LoginForm />}
-          {onRegister && <RegisterForm />}
-        </Modal>,
-        document.querySelector("#modal")
-      )}
       <main className={classes.main}>
         <div className={classes["background"]}></div>
-        <button className={classes["user-btn"]} onClick={handleClick}>
-          <FontAwesomeIcon icon={faUser} />
-        </button>
+
         <div className={classes["main-container"]}>
           <div className={classes["content-container"]}>
             <div className={classes["texto"]}>
-              <h5>
-                Más de 500 de nuestros alumnos ya estan trabajando en las
-                empresas-partners
-              </h5>
+              <p>
+                {" "}
+                <FontAwesomeIcon
+                  icon={faLocationDot}
+                  className={classes["icon-location"]}
+                />{" "}
+                Talento esta aqui
+              </p>
+              <div className={classes["typing-box"]}>
+                <FontAwesomeIcon icon={faMagnifyingGlass} />
+                <Typewriter
+                  className={classes["typing"]}
+                  options={{
+                    strings: [
+                      "Web Developer",
+                      "Data Analyst",
+                      "UX/UI Designer",
+                      "Cybersecurity Engineer",
+                      "Database Administrator",
+                    ],
+                    autoStart: true,
+                    loop: true,
+                  }}
+                />
+              </div>
+              <div className={classes["info-box"]}>
+                <span className={classes.number}>+ 100</span> ofertas IT
+              </div>
+              <div className={classes["info-box"]}>
+                <span className={classes.number}>+ 30</span> Empresas
+              </div>
+              <div className={classes["info-box"]}>
+                <span className={classes.number}>+ 500 </span> CVs
+              </div>
             </div>
           </div>
-        <div className={classes["images-container"]}>
-          <div className={classes["images-box"]}>
-            <div className={classes["images-row"]}>
-              <div className={`${classes["image-one-box"]} ${classes["fadeInLeft"]}`}>
-                <figure className={classes["figure-image"]}>
-                  <img src={img1} alt='people' />
-                </figure>             
-              </div>
-              <div className={`${classes["image-two-three-box"]} ${classes["fadeInRight"]}`}>
-                <figure className={classes["figure-image"]}>
-                  <img src={img2} alt='people' />
-                </figure>
-                <figure className={classes["figure-image"]}>
-                  <img src={img3} alt='people' />
-                </figure>
+          <div className={classes["images-container"]}>
+            <div className={classes["images-box"]}>
+              <div className={classes["images-row"]}>
+                <div
+                  className={`${classes["image-one-box"]} ${classes["fadeInLeft"]}`}
+                >
+                  <div
+                    className={
+                      !apearNotification
+                        ? classes.hide
+                        : `${classes["notification"]} ${classes[apearNotification]}`
+                    }
+                  >
+                    <span
+                      className={`fa-layers fa-fw fa-xl ${classes["icon"]}`}
+                    >
+                      <FontAwesomeIcon
+                        icon={faSquare}
+                        className={classes["icon-bg"]}
+                      />
+                      <FontAwesomeIcon
+                        icon={faEnvelope}
+                        inverse
+                        transform='shrink-8'
+                        className={classes["icon-color"]}
+                      />
+                    </span>
+                    <p> Nueva oferta de trabajo</p>
+                  </div>
+                  <figure className={classes["figure-image"]}>
+                    <img src={img1} alt='people' />
+                  </figure>
+                </div>
+                <div
+                  className={`${classes["image-two-three-box"]} ${classes["fadeInRight"]}`}
+                >
+                  <figure className={classes["figure-image"]}>
+                    <img src={img2} alt='people' />
+                  </figure>
+                  <figure className={classes["figure-image"]}>
+                    <img src={img3} alt='people' />
+                  </figure>
+                  <div
+                    className={
+                      !apearCandidates
+                        ? classes.hide
+                        : `${classes["candidates"]} ${classes[apearCandidates]}`
+                    }
+                  >
+                    <p>500+ Candidatos</p>
+                    <figure className={classes.avatars}>
+                      <img src={avatars} alt='avatars' />
+                    </figure>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
-        </div>
-        
-
-        {/* <div className={classes["images-container"]}>
-          <div
-            className={`${classes["img1-container"]} ${classes["grid-item"]}`}
-          >
-            <img src={img1} alt='people' />
-          </div>
-          <div
-            className={`${classes["img2-container"]} ${classes["grid-item"]}`}
-          >
-            <img src={img2} alt='people' />
-          </div>
-          <div
-            className={`${classes["img3-container"]} ${classes["grid-item"]}`}
-          >
-            <img src={img3} alt='people' />
-          </div>
-        </div> */}
-        
       </main>
     </>
   );

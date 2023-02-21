@@ -1,0 +1,21 @@
+.header{
+    width: 100vw;
+    height: var(--header-height);
+    background-color: #fff;
+    overflow: hidden;
+}
+
+.user-btn {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    margin: .7rem;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 1.3rem;
+  }
+  
+  .user-btn:hover {
+    color: #47d7ac;
+  }

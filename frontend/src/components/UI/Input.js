@@ -12,6 +12,7 @@ const Input = ({
   value,
   ariaDescribedby,
   id,
+  reference,
 }) => {
   return (
     <input
@@ -27,6 +28,7 @@ const Input = ({
       onBlur={onBlur}
       value={value}
       id={id}
+      ref={reference}
     />
   );
 };

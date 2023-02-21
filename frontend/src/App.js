@@ -3,7 +3,8 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import HomePage from "./views/HomePage";
 import { useEffect } from "react";
 import ApiRequest from "./services/apiRequest";
-
+import LoginModalProvider from "./providers/LoginModalProvider";
+import HeaderProvisional from "./components/HeaderProvisional";
 function App() {
   useEffect(() => {
     const handleRememberedUser = async () => {
@@ -23,15 +24,14 @@ function App() {
     (async () => handleRememberedUser())();
   }, []);
   return (
-    <HomePage />
-
-    // <Router>
-    //   {/* Header aqui */}
-
-    //   <Routes>
-    //     <Route path='/' element={<HomePage />} />
-    //   </Routes>
-    // </Router>
+    <Router>
+      <LoginModalProvider>
+        <HeaderProvisional />
+      </LoginModalProvider>
+      <Routes>
+        <Route path='/' element={<HomePage />} />
+      </Routes>
+    </Router>
   );
 }
 export default App;

@@ -20,12 +20,12 @@ import { EMAIL_REGEX, USER_REGEX, PWD_REGEX } from "../../utils/regExp";
 import ApiRequest from "../../services/apiRequest";
 import Button from "../UI/Button";
 import Input from "../UI/Input";
+import InfoAlert from "../UI/InfoAlert";
 
 const RegisterForm = () => {
   const { setOnRegister, openLoginModal, setOpenLoginModal } =
     useContext(LoginModalContext);
   const nameRef = useRef(); //Set focus in user input when component loads
-  const errRef = useRef(); //Set focus if we get error, so screenreader can read it
 
   const [state, dispatch] = useReducer(registerReducer, initialRegisterState);
 
@@ -113,6 +113,7 @@ const RegisterForm = () => {
       });
       setTimeout(() => {
         setOnRegister(false);
+        setSuccess(false);
       }, 2000);
     } else if (response.message === "Failed to fetch") {
       dispatch({
@@ -128,21 +129,15 @@ const RegisterForm = () => {
         <h5>
           Crea tu cuenta en <br /> CODE SPACE WORKS
         </h5>
-        {/* Parragraph for display error message.*/}
-
-        <p
-          ref={errRef}
-          className={state.errMsg ? classes["errmsg"] : classes["offscreen"]}
-          aria-live='assertive'
-        >
-          <FontAwesomeIcon icon={faInfoCircle} /> {state.errMsg}
-        </p>
-        {success && (
-          <p className={classes["alert-green"]}>
-            <FontAwesomeIcon icon={faInfoCircle} /> Usuario creado con exito
-          </p>
+        {state.errMsg && (
+          <InfoAlert className='alert-red' alertTxt={state.errMsg} />
         )}
-
+        {success && (
+          <InfoAlert
+            className='alert-green'
+            alertTxt='Usuario creado con exito'
+          />
+        )}
         <form onSubmit={handleSubmit}>
           <div className={classes.roles}>
             <div

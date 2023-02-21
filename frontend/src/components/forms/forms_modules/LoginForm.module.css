@@ -47,28 +47,4 @@
   margin: 1rem 0;
 }
 
-.errMsg{
-  background-color: rgb(207, 60, 60);
-  border-radius: 0.3rem;
-  color: rgb(41, 39, 39);
-  padding: 0.25rem;
-  width: 100%;
-  margin: 1rem auto;
-  display: block;
-  font-weight: 300;
-  font-size: .7rem;
-  color: #fff;
-}
 
-.alert-green {
-  background-color: var(--valid);
-  border-radius: 0.3rem;
-  color: rgb(41, 39, 39);
-  padding: 0.25rem;
-  width: 100%;
-  margin: 1rem auto;
-  display: block;
-  font-weight: 300;
-  font-size: .7rem;
-  color: #fff;
-}

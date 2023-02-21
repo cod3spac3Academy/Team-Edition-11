@@ -1,11 +1,11 @@
 import Button from "../UI/Button";
 import Input from "../UI/Input";
+import InfoAlert from "../UI/InfoAlert";
 import classes from "./forms_modules/LoginForm.module.css";
-import { useContext, useState, useEffect } from "react";
+import { useContext, useState, useEffect, useRef } from "react";
 import { LoginModalContext } from "../../providers/LoginModalProvider";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import ApiRequest from "../../services/apiRequest";
+
 const LoginForm = () => {
   const { setOnRegister, setOpenLoginModal } = useContext(LoginModalContext);
   const [loggedUser, setLoggedUser] = useState({
@@ -16,9 +16,13 @@ const LoginForm = () => {
 
   const [succesfullLogin, setSuccesfullLogin] = useState(false);
   const [errMsg, setErrMsg] = useState("");
+
   useEffect(() => {
     setErrMsg("");
   }, [loggedUser]);
+
+  const errRef = useRef();
+  const emailRef = useRef();
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -37,7 +41,11 @@ const LoginForm = () => {
         localStorage.setItem("refreshToken", response.refreshToken);
         localStorage.setItem("userId", response.id);
       }
-      setOpenLoginModal(false);
+      setTimeout(() => {
+        setOpenLoginModal(false);
+        setSuccesfullLogin(false);
+      }, 1500);
+
       sessionStorage.setItem("accessToken", response.accessToken);
       sessionStorage.setItem("refreshToken", response.refreshToken);
       sessionStorage.setItem("userId", response.id);
@@ -60,17 +68,11 @@ const LoginForm = () => {
       onSubmit={(e) => e.preventDefault()}
     >
       <h5>Accede a CODE SPACE WORKS</h5>
-      {errMsg && (
-        <p className={classes.errMsg}>
-          <FontAwesomeIcon icon={faInfoCircle} />
-          {errMsg}
-        </p>
-      )}
+      {errMsg && <InfoAlert className='alert-red' alertTxt={errMsg} reference={errRef}/>}
       {succesfullLogin && (
-        <p className={classes["alert-green"]}>
-          <FontAwesomeIcon icon={faInfoCircle} /> Signed in successfully
-        </p>
+        <InfoAlert className='alert-green' alertTxt='Signed in successfully' />
       )}
+
       <label htmlFor='email'>Email</label>
       <Input
         type='email'
@@ -114,6 +116,9 @@ const LoginForm = () => {
         buttonTxt='Acceder'
         onClick={handleLogin}
         disabled={!loggedUser.email || !loggedUser.password ? true : false}
+        className={
+          !loggedUser.email || !loggedUser.password ? "disabled" : "form-btn"
+        }
       />
       <div className={classes["no-account"]}>
         <p>
