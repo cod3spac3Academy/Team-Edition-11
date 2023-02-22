@@ -7,7 +7,16 @@ import { LoginModalContext } from "../../providers/LoginModalProvider";
 import ApiRequest from "../../services/apiRequest";
 
 const LoginForm = () => {
-  const { setOnRegister, setOpenLoginModal } = useContext(LoginModalContext);
+  const {
+    onLogin,
+    setOnLogin,
+    setOnRegister,
+    openLoginModal,
+    setOpenLoginModal,
+  } = useContext(LoginModalContext);
+  const errRef = useRef();
+  const emailRef = useRef();
+
   const [loggedUser, setLoggedUser] = useState({
     email: "",
     password: "",
@@ -16,13 +25,30 @@ const LoginForm = () => {
 
   const [succesfullLogin, setSuccesfullLogin] = useState(false);
   const [errMsg, setErrMsg] = useState("");
+  const [isRendered, setIsRendered] = useState(false);
+  //Put focus in email field when the component loads
+  useEffect(() => {
+    setIsRendered(onLogin);
+  }, [onLogin]);
+
+  useEffect(() => {
+    if (isRendered) emailRef.current.focus();
+  }, [isRendered]);
+
+  useEffect(() => {
+    if (errMsg) errRef.current.focus();
+  }, [errMsg]);
+
+  useEffect(() => {
+    if (!openLoginModal) {
+      setOnLogin(false);
+      setOnRegister(false);
+    }
+  }, [openLoginModal]);
 
   useEffect(() => {
     setErrMsg("");
   }, [loggedUser]);
-
-  const errRef = useRef();
-  const emailRef = useRef();
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -68,7 +94,9 @@ const LoginForm = () => {
       onSubmit={(e) => e.preventDefault()}
     >
       <h5>Accede a CODE SPACE WORKS</h5>
-      {errMsg && <InfoAlert className='alert-red' alertTxt={errMsg} reference={errRef}/>}
+      {errMsg && (
+        <InfoAlert className='alert-red' alertTxt={errMsg} reference={errRef} />
+      )}
       {succesfullLogin && (
         <InfoAlert className='alert-green' alertTxt='Signed in successfully' />
       )}
@@ -76,10 +104,11 @@ const LoginForm = () => {
       <label htmlFor='email'>Email</label>
       <Input
         type='email'
-        name='userName'
-        id='userName'
+        name='email'
+        id='email'
         placeholder='Email'
         value={loggedUser.email}
+        reference={emailRef}
         onChange={(e) => {
           setLoggedUser({ ...loggedUser, email: e.target.value });
         }}
@@ -127,6 +156,7 @@ const LoginForm = () => {
             className={classes.register}
             onClick={() => {
               setOnRegister(true);
+              setOnLogin(false);
             }}
           >
             {" "}

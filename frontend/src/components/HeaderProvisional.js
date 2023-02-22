@@ -10,11 +10,12 @@ import LoginForm from "./forms/LoginForm";
 import RegisterForm from "./forms/RegisterForm";
 
 const HeaderProvisional = () => {
-    const { onRegister, setOpenLoginModal, openLoginModal } =
+    const {onLogin, setOnLogin, onRegister, setOpenLoginModal, openLoginModal } =
     useContext(LoginModalContext);
 
   const handleClick = () => {
       setOpenLoginModal(true);
+      setOnLogin(true);
   };
   return (
     <header className = {classes.header}>
@@ -23,7 +24,7 @@ const HeaderProvisional = () => {
         </button>
         {ReactDOM.createPortal(
         <Modal openModal={openLoginModal} setOpenModal={setOpenLoginModal}>
-          {!onRegister && <LoginForm />}
+          {onLogin && <LoginForm />}
           {onRegister && <RegisterForm />}
         </Modal>,
         document.querySelector("#modal")
