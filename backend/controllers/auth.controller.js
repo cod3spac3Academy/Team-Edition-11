@@ -171,8 +171,7 @@ const login = async (req, res) => {
  */
 const refresh = (req, res) => {
   const refreshToken = req.headers["auth-token"];
-
-  if (!refreshToken || !req.user)
+   if (!refreshToken)
     return res.status(401).json({ message: "Unauthorized" });
 
   jwt.verify(

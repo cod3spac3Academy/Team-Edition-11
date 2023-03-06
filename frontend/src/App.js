@@ -19,6 +19,7 @@ function App() {
       if (response.accessToken) {
         sessionStorage.setItem("accessToken", response.accessToken);
         sessionStorage.setItem("userId", response.id);
+        sessionStorage.setItem("role", response.role);
       }
     };
     (async () => handleRememberedUser())();

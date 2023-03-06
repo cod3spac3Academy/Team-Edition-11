@@ -13,12 +13,8 @@ import ApiRequest from "../../services/apiRequest";
 import { EMAIL_REGEX } from "../../utils/regExp";
 const LoginForm = () => {
   //access to context
-  const {
-    setOnLogin,
-    setOnRegister,
-    openLoginModal,
-    setOpenLoginModal,
-  } = useContext(LoginModalContext);
+  const { setOnLogin, setOnRegister, openLoginModal, setOpenLoginModal } =
+    useContext(LoginModalContext);
 
   //reference to focus on error message for accesibility
   const errRef = useRef();
@@ -85,6 +81,7 @@ const LoginForm = () => {
       if (loggedUser.rememberMe) {
         localStorage.setItem("refreshToken", response.refreshToken);
         localStorage.setItem("userId", response.id);
+        localStorage.setItem("role", response.role);
       }
       setTimeout(() => {
         setOpenLoginModal(false);
@@ -100,6 +97,7 @@ const LoginForm = () => {
       sessionStorage.setItem("accessToken", response.accessToken);
       sessionStorage.setItem("refreshToken", response.refreshToken);
       sessionStorage.setItem("userId", response.id);
+      sessionStorage.setItem("role", response.role);
     }
   };
 
