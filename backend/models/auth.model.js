@@ -1,3 +1,9 @@
+/**
+ * @fileoverview This file contains the register schema for the database.
+ * named Login in order to save it in the database as "logins"
+ * @author Alina Dorosh
+ */
+
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 

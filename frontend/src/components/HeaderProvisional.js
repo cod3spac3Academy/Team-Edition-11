@@ -1,3 +1,8 @@
+/**
+ * @fileoverview Header provisional component while the header is being built
+ * @author Alina Dorosh
+ */
+
 import classes from './modules/HeaderProvisional.module.css'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-regular-svg-icons";

@@ -1,5 +1,10 @@
+/**
+ * @fileoverview This file contains the register form component
+ * @author Alina Dorosh
+ * */
+
 import classes from "./forms_modules/RegisterForm.module.css";
-import { useRef, useState, useEffect, useReducer, useContext } from "react";
+import { useState, useEffect, useReducer, useContext } from "react";
 import { LoginModalContext } from "../../providers/LoginModalProvider";
 import {
   faCheck,
@@ -23,21 +28,20 @@ import Input from "../UI/Input";
 import InfoAlert from "../UI/InfoAlert";
 
 const RegisterForm = () => {
-  const { setOnRegister,setOnLogin, openLoginModal, setOpenLoginModal } =
+  //access context
+  const { setOnRegister, setOnLogin, openLoginModal, setOpenLoginModal } =
     useContext(LoginModalContext);
-  const nameRef = useRef(); //Set focus in user input when component loads
 
+  //access reducer
   const [state, dispatch] = useReducer(registerReducer, initialRegisterState);
 
+  // if modal window closed reset state
   useEffect(() => {
-    if (!openLoginModal) setOnRegister(false);
+    if (!openLoginModal) {
+      setOnLogin(false);
+      setOnRegister(false);
+    }
   }, [openLoginModal]);
-
-  //Put focus in name field
-  //Dependency array is empty, so it only happens, when the component loads
-  //   useEffect(() => {
-  //     nameRef.current.focus();
-  //   }, []);
 
   useEffect(() => {
     const result = EMAIL_REGEX.test(state.email); //email validation returns boolean
@@ -62,7 +66,7 @@ const RegisterForm = () => {
     dispatch({ type: REGISTER.ERROR_MSG, payload: "" });
   }, [state.userName, state.email, state.pwd, state.matchPwd]);
 
-  //   const navigate = useNavigate();
+  //   const navigate = useNavigate(); commented out while routing is not implemented
 
   //state for successfull registration
   const [success, setSuccess] = useState(false);
@@ -78,18 +82,18 @@ const RegisterForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const v1 = EMAIL_REGEX.test(state.email); //boolean
-    const v2 = PWD_REGEX.test(state.pwd); //boolean
-    const v3 = USER_REGEX.test(state.userName); // boolean
+
+    //second validation on submit
+    const v1 = EMAIL_REGEX.test(state.email);
+    const v2 = PWD_REGEX.test(state.pwd);
+    const v3 = USER_REGEX.test(state.userName);
     if (!v1 || !v2 || !v3) {
       dispatch({ type: REGISTER.ERROR_MSG, payload: "Invalid Entry" });
       return;
     }
     const response = await ApiRequest.register(newUser);
-    console.log("response", response);
 
     if (response.status === "success") {
-      console.log("register response", response);
       sessionStorage.setItem("accessToken", response.newUser.accessToken);
       sessionStorage.setItem("refreshToken", response.newUser.refreshToken);
       sessionStorage.setItem("userId", response.newUser.id);
@@ -201,7 +205,6 @@ const RegisterForm = () => {
             }
             value={state.userName}
             id='userName'
-            // ref={nameRef}
           />
 
           {/* This paragraph will be displayed only when input onFocus, at least 1 char is typed and if validation fails */}

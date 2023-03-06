@@ -1,3 +1,8 @@
+/**
+ * @fileoverview This is a Home component
+ * @author Alina Dorosh
+ */
+
 import classes from "./modules/Home.module.css";
 import img1 from "../assets/img/banner-img-1.png";
 import img2 from "../assets/img/banner-img-2.png";
@@ -13,12 +18,15 @@ import {
 import { faEnvelope } from "@fortawesome/free-regular-svg-icons";
 import { useState } from "react";
 const Home = () => {
+
+  //states for animation
   const [apearNotification, setApearNotification] = useState("");
   const [apearCandidates, setApearCandidates] = useState("");
   const [apearInfoBox1, setApearInfoBox1] = useState("");
   const [apearInfoBox2, setApearInfoBox2] = useState("");
   const [apearInfoBox3, setApearInfoBox3] = useState("");
 
+  //animations timeouts
   setTimeout(() => {
     setApearInfoBox1("fadeInLeft");
   }, 1800);
@@ -59,7 +67,7 @@ const Home = () => {
                       "Data Analyst",
                       "UX/UI Designer",
                       "Cybersecurity Engineer",
-                      "Database Administrator",
+                      "Database Admin",
                     ],
                     autoStart: true,
                     loop: true,

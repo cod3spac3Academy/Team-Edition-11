@@ -1,3 +1,8 @@
+/**
+ * @fileoverview This file contains the LoginForm component.
+ * @author Alina Dorosh
+ */
+
 import Button from "../UI/Button";
 import Input from "../UI/Input";
 import InfoAlert from "../UI/InfoAlert";
@@ -5,40 +10,45 @@ import classes from "./forms_modules/LoginForm.module.css";
 import { useContext, useState, useEffect, useRef } from "react";
 import { LoginModalContext } from "../../providers/LoginModalProvider";
 import ApiRequest from "../../services/apiRequest";
-
+import { EMAIL_REGEX } from "../../utils/regExp";
 const LoginForm = () => {
+  //access to context
   const {
-    onLogin,
     setOnLogin,
     setOnRegister,
     openLoginModal,
     setOpenLoginModal,
   } = useContext(LoginModalContext);
-  const errRef = useRef();
-  const emailRef = useRef();
 
+  //reference to focus on error message for accesibility
+  const errRef = useRef();
+
+  //state to control inputs
   const [loggedUser, setLoggedUser] = useState({
     email: "",
     password: "",
     rememberMe: false,
   });
 
+  //state to control succesfull login
   const [succesfullLogin, setSuccesfullLogin] = useState(false);
+
+  //state to control error message
   const [errMsg, setErrMsg] = useState("");
-  const [isRendered, setIsRendered] = useState(false);
-  //Put focus in email field when the component loads
-  useEffect(() => {
-    setIsRendered(onLogin);
-  }, [onLogin]);
+
+  //state to control email validation
+  const [validEmail, setValidEmail] = useState(false);
 
   useEffect(() => {
-    if (isRendered) emailRef.current.focus();
-  }, [isRendered]);
+    const result = EMAIL_REGEX.test(loggedUser.email); //email validation with regex
+    setValidEmail(result);
+  }, [loggedUser.email]);
 
   useEffect(() => {
-    if (errMsg) errRef.current.focus();
+    if (errMsg) errRef.current.focus(); //focus on error message for accesibility
   }, [errMsg]);
 
+  //if login modal is closed, reset states
   useEffect(() => {
     if (!openLoginModal) {
       setOnLogin(false);
@@ -46,12 +56,19 @@ const LoginForm = () => {
     }
   }, [openLoginModal]);
 
+  //any change in loggedUser state, reset error message
   useEffect(() => {
     setErrMsg("");
   }, [loggedUser]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
+
+    //if email is not valid, show error message, avoid requests to backend
+    if (!validEmail) {
+      setErrMsg("Please enter a valid email");
+      return;
+    }
     const response = await ApiRequest.login(loggedUser);
     if (response.message === "Failed to fetch") {
       setErrMsg("Conection error. Please reload the app");
@@ -63,6 +80,8 @@ const LoginForm = () => {
     }
     if (response.accessToken) {
       setSuccesfullLogin(true);
+
+      //if remember me is checked, save tokens in localStorage
       if (loggedUser.rememberMe) {
         localStorage.setItem("refreshToken", response.refreshToken);
         localStorage.setItem("userId", response.id);
@@ -70,22 +89,18 @@ const LoginForm = () => {
       setTimeout(() => {
         setOpenLoginModal(false);
         setSuccesfullLogin(false);
+        //reset loggedUser state after succesfull login
+        setLoggedUser({
+          email: "",
+          password: "",
+          rememberMe: false,
+        });
       }, 1500);
 
       sessionStorage.setItem("accessToken", response.accessToken);
       sessionStorage.setItem("refreshToken", response.refreshToken);
       sessionStorage.setItem("userId", response.id);
-      setLoggedUser({
-        email: "",
-        password: "",
-        rememberMe: false,
-      });
     }
-    // Update last login date
-    const update = await ApiRequest.update(
-      { lastLogin: new Date() },
-      sessionStorage.getItem("userId")
-    );
   };
 
   return (
@@ -108,7 +123,6 @@ const LoginForm = () => {
         id='email'
         placeholder='Email'
         value={loggedUser.email}
-        reference={emailRef}
         onChange={(e) => {
           setLoggedUser({ ...loggedUser, email: e.target.value });
         }}

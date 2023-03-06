@@ -6,6 +6,7 @@ import ApiRequest from "./services/apiRequest";
 import LoginModalProvider from "./providers/LoginModalProvider";
 import HeaderProvisional from "./components/HeaderProvisional";
 function App() {
+  //ckeck if there is a remembered user and log him in if there is, using refresh token for authentication and recieve new access token
   useEffect(() => {
     const handleRememberedUser = async () => {
       if (!localStorage.getItem("refreshToken")) return;
@@ -14,9 +15,8 @@ function App() {
         localStorage.getItem("refreshToken")
       );
       if (!response.accessToken) return;
-      console.log(response);
+
       if (response.accessToken) {
-        console.log(response);
         sessionStorage.setItem("accessToken", response.accessToken);
         sessionStorage.setItem("userId", response.id);
       }

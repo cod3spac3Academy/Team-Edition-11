@@ -1,3 +1,8 @@
+/**
+ * @fileoverview This file contains the database connection function
+ * @author Alina Dorosh
+ */
+
 const mongoose = require('mongoose')
 
 const connectDB = async () => {

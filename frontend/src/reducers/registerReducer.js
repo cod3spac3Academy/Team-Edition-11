@@ -1,3 +1,8 @@
+/**
+ * @fileoverview Reducer for state management in the register form
+ * @author Alina Dorosh
+ */
+
 export const REGISTER = {
   USER_ROLE: "role",
   USER_NAME_INPUT: "userName",

@@ -1,3 +1,8 @@
+/**
+ * @fileoverview context for login modal window with states and functions to control it
+ * @author Alina Dorosh
+ */
+
 import { createContext, useState } from "react";
 
 export const LoginModalContext = createContext(null);

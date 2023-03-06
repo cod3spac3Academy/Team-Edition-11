@@ -1,3 +1,11 @@
+/**
+ * @fileoverview This is a reusable modal window component to render in the portal
+ * @author Alina Dorosh
+ * @param {boolean} openModal - Boolean to open the modal
+ * @param {function} setOpenModal - Function to set the openModal state
+ * @param {object} children - Children to be rendered in the modal
+ */
+
 import classes from "./modulesUI/Modal.module.css";
 import { useEffect, useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";

@@ -1,3 +1,8 @@
+/**
+ * @fileoverview This file contains the functions that make the requests to the backend for login,register and refresh token
+ * @author Alina Dorosh
+ */
+
 import { USERS_API } from "../config/urls";
 
 export default class ApiRequest {
@@ -11,10 +16,8 @@ export default class ApiRequest {
         body: JSON.stringify(body),
       });
       let data = await response.json();
-      console.log("data from register request:", data);
       return data;
     } catch (err) {
-      console.log("error from register request:", err);
       return err;
     }
   }
@@ -35,30 +38,13 @@ export default class ApiRequest {
     }
   }
 
-  static async update(body, id) {
-    try {
-      const response = await fetch(`${USERS_API}/login/${id}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          authorization: `Bearer ${sessionStorage.getItem("accessToken")}`,
-        },
-        body: JSON.stringify(body),
-      });
-      let data = await response.json();
-      return data;
-    } catch (err) {
-      return err;
-    }
-  }
-
   static async refresh(refreshToken) {
     try {
       const response = await fetch(`${USERS_API}/refresh`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          authorization: `Bearer ${refreshToken}`,
+          "auth-token": refreshToken,
         },
       });
       let data = await response.json();
