@@ -2,8 +2,7 @@
 export const USER_REGEX = /^[a-zA-Z][a-zA-Z0-9-_]{3,23}$/;
 
 //Regex for validate Email
-export const EMAIL_REGEX =
-  /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+export const EMAIL_REGEX = /\S+@\S+\.\S+/;
 
 //Regex for validate password
 //8 to 24 characters .Must include uppercase and lowercase letters, a number and at least one special character.(!@#$%)

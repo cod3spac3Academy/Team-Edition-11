@@ -16,15 +16,7 @@ const createNewUser = asyncHandler(async (req, res) => {
   }
   // Check for duplicate email
   const duplicate = await Login.findOne({ email }).lean().exec();
-  if (duplicate) {
-    return res.status(409).json({
-      status: "failed",
-      data: null,
-      message: "This email is already registered",
-      error: error.message,
-    });
-  }
-
+ 
   try {
     const newUser = new Login({
       email,
@@ -130,13 +122,13 @@ const login = asyncHandler(async (req, res) => {
             },
           },
           process.env.ACCESS_TOKEN_SECRET,
-          { expiresIn: "20s" }
+          { expiresIn: "10m" }
         );
 
         const refreshToken = jwt.sign(
           { email: foundUser.email },
           process.env.REFRESH_TOKEN_SECRET,
-          { expiresIn: "1m" }
+          { expiresIn: "7d" }
         );
         // Send accessToken and refreshToken
         res.json({

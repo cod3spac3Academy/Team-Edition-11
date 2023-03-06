@@ -23,7 +23,7 @@ import Input from "../UI/Input";
 import InfoAlert from "../UI/InfoAlert";
 
 const RegisterForm = () => {
-  const { setOnRegister, openLoginModal, setOpenLoginModal } =
+  const { setOnRegister,setOnLogin, openLoginModal, setOpenLoginModal } =
     useContext(LoginModalContext);
   const nameRef = useRef(); //Set focus in user input when component loads
 
@@ -112,6 +112,7 @@ const RegisterForm = () => {
           "This email is already registered, you will be redirected to login form",
       });
       setTimeout(() => {
+        setOnLogin(true);
         setOnRegister(false);
         setSuccess(false);
       }, 2000);

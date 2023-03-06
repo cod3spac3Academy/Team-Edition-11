@@ -12,6 +12,7 @@ const loginSchema = new Schema({
     required: true,
     unique: true,
     trim: true,
+    match: [/\S+@\S+\.\S+/, "is invalid"],
     minlength: 6,
   },
   password: {

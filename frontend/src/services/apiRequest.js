@@ -11,8 +11,10 @@ export default class ApiRequest {
         body: JSON.stringify(body),
       });
       let data = await response.json();
+      console.log("data from register request:", data);
       return data;
     } catch (err) {
+      console.log("error from register request:", err);
       return err;
     }
   }

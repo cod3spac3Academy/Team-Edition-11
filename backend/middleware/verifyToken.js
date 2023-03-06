@@ -12,7 +12,7 @@ const verifyToken = (req, res, next) => {
   try {
     jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
       if (err) return res.status(403).json({ message: "Forbidden" });
-      req.user = decoded.UserInfo.email;
+      req.email = decoded.UserInfo.email;
       req.role = decoded.UserInfo.role;
       req.id = decoded.UserInfo.id;
       next();
@@ -21,7 +21,7 @@ const verifyToken = (req, res, next) => {
     try {
       jwt.verify(token, process.env.REFRESH_TOKEN_SECRET, (err, decoded) => {
         if (err) return res.status(403).json({ message: "Forbidden" });
-        req.user = decoded.UserInfo.email;
+        req.email = decoded.UserInfo.email;
         next();
       });
     } catch (error) {
