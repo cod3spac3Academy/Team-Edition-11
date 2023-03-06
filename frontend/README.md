@@ -1,4 +1,4 @@
-# CODE SPACE WORK
+![baner](https://github.com/AlinaDorosh-dev/Team-Edition-11/blob/feature_AlinaDorosh-dev/frontend/public/images/banner%20(1).png)
 
 ## Frontend: 
 
