@@ -10,5 +10,5 @@ Parte realizada por Alina Dorosh:
 
 - ruta e endpoint correspondiente de refresco de token, que devuelve un nuevo token de acceso.
 
-En los endpoints mecionados se ha utilizado la función de asyncHandler del paquete express-async-handler para el manejo mas robusto de las funciones asíncronas.
+En los endpoints mencionados se ha utilizado la función de asyncHandler del paquete express-async-handler para el manejo más robusto de las funciones asíncronas.
   

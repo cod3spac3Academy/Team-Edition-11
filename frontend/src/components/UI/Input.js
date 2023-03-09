@@ -15,8 +15,10 @@
  * @param {object} reference - Reference to the input
  */
 
-
 import classes from "./modulesUI/Input.module.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye, faEyeSlash } from "@fortawesome/free-regular-svg-icons";
+import { useState } from "react";
 
 const Input = ({
   className = "form-input",
@@ -32,22 +34,33 @@ const Input = ({
   id,
   reference,
 }) => {
+  const [showPassword, setShowPassword] = useState(false);
+  const handleClickShowPassword = () => setShowPassword(!showPassword);
   return (
-    <input
-      type={type}
-      className={classes[className]}
-      placeholder={placeholder}
-      onChange={onChange}
-      autoComplete='off'
-      required={required}
-      aria-invalid={ariaInvalid}
-      aria-describedby={ariaDescribedby}
-      onFocus={onFocus}
-      onBlur={onBlur}
-      value={value}
-      id={id}
-      ref={reference}
-    />
+    <>
+      <input
+        type={showPassword ? "text" : type}
+        className={classes[className]}
+        placeholder={placeholder}
+        onChange={onChange}
+        autoComplete='off'
+        required={required}
+        aria-invalid={ariaInvalid}
+        aria-describedby={ariaDescribedby}
+        onFocus={onFocus}
+        onBlur={onBlur}
+        value={value}
+        id={id}
+        ref={reference}
+      />
+      {type === "password" && (
+        <FontAwesomeIcon
+          className={classes["password-visiblity-icon"]}
+          icon={showPassword ? faEye : faEyeSlash}
+          onClick={handleClickShowPassword}
+        />
+      )}
+    </>
   );
 };
 
